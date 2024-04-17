@@ -153,20 +153,28 @@ if __name__ == '__main__':
         #xor two integers together
         xord = key ^ intRhalf
 
+        print(xord)
+    
         #s-box
         a=format(xord, '048b')
-        #for i in range(4):
         print(a)
-        b = a[:8]
+        val = 0
 
-        first = b[0]
-        last = b[-1]
-        mid = b[2:6]
-        row = 0
-        val += SBox[i][row][mid]
+
+        for i in range(8):
+            b = a[i*6:(i+1)*6]
+
+            first = int(b[0])
+            last = int(b[-1])
+            mid = int(b[1:5],2)
+            row = first * 2 + last
+            val = (val << 4) + SBox[i][row][mid]
+
+        print(val)
+
         
-
-
+        
+        
         #xor the values
   
 
@@ -180,4 +188,3 @@ if __name__ == '__main__':
 
 
         
-
