@@ -94,6 +94,13 @@ SBox = [
 ]
 
 
+interPerm = [
+    16,	7,	20,	21,	29,	12,	28,	17,
+    1,	15,	23,	26,	5,	18,	31,	10,
+    2,	8,	24,	14,	32,	27,	3,	9,
+    19,	13,	30,	6,	22,	11,	4,	25
+]
+
 def encrypt(plaintext, key):
     ciphertext = ""
     return ciphertext
@@ -122,6 +129,29 @@ def initialPerm(binString, ip):
 def expanFunc(binString, ef):
     return [binString[x-1] for x in ef]#swap positions with initPermutation
 
+def permutation(binString, interPerm):
+    return [binString[x-1] for x in interPerm]#swap positions with initPermutation
+    
+def performPc2(key, pc2):
+    return [key[x-1] for x in pc2]#swap positions with initPermutation
+
+
+
+def generateKey():
+    #seed rng based on system time
+    random.seed(time.time()) 
+    
+    #get 56 bit key
+    key = random.getrandbits(56)
+    
+	#convert to binary and pad empty with 0s
+    key = bin(key)[2:].zfill(56)
+    
+    return key
+
+
+
+
 
 if __name__ == '__main__':
     text = ""
@@ -129,37 +159,60 @@ if __name__ == '__main__':
     while text != "Quit":
         text = str(input('Enter text to encrypt ("Exit" to quit): '))
         
-        #see rng based on system time
-        random.seed(time.time())
-        
-        #get 56 bit key
-        key = random.getrandbits(56)
-        
+        #Key returns 48 bit i.e apply pc-2
+        b = generateKey()
+        print(b)
+        print(len(str(b)))
+
+        key_bits = [int(bit) for bit in b]
+
+        pcTwoKey = performPc2(key_bits, pc2)
+        print("Key after pc2")
+        ba = int(''.join(map(str,pcTwoKey)),2)
+        print(ba)
+        print(len(str(ba)))
+
         #convert text to binary
-        binRep = strToBits(text)
+        binRep = strToBits(text) 
+
         
-        #perform initial permutation
+        #perform initial permutation || returns 64 bit
         initialPermutation = initialPerm(binRep, ip)
-        
+        print("Inital Perm for text")
+        print(binRep)
+        bc = int(''.join(map(str,initialPermutation)),2)
+        print(bc)
+
         #split permutation into 32 bit bits halves
         lhalf, rhalf = initialPermutation[:len(initialPermutation)//2], initialPermutation[len(initialPermutation)//2:]
+        print("splitting up halves")
         
-        #perform expansion permutation
+        #perform expansion permutation || returns 48 bit
         rhalf = expanFunc(rhalf,ef)
+        print("expanding right half")
+        cda = int(''.join(map(str,rhalf)),2)
+        print(cda)
         
         #convert back to integer
         intRhalf = int(''.join(map(str,rhalf)),2)
-    
-        #xor two integers together
-        xord = key ^ intRhalf
+        xorKey = int(''.join(map(str,pcTwoKey)),2)
 
+
+        #xor two integers together
+        xord = xorKey ^ intRhalf
+        print("xord:")
         print(xord)
+        print(xorKey)
+        print(intRhalf)
+
+        #print(bin(xorKey)[2:])
+        #print(bin(intRhalf)[2:])
+        #print(bin(xord)[2:])
+
     
         #s-box
-        a=format(xord, '048b')
-        print(a)
+        a= bin(xord)[2:]
         val = 0
-
 
         for i in range(8):
             b = a[i*6:(i+1)*6]
@@ -170,21 +223,29 @@ if __name__ == '__main__':
             row = first * 2 + last
             val = (val << 4) + SBox[i][row][mid]
 
-        print(val)
+        #print(val)
+        perm = bin(val)[2:]
+        print("permmutation")
+        print(perm)#convert this to list!!
+
+        #intertemp = permutation(perm, interPerm)
+        #temp = int(''.join(map(str,perm)),2)
+        #print(intertemp)
+        #print(bin(temp)[2:])
+
+
+        #ip = format(val, '032b')
+        #ip = permutation(ip, interPerm)
+        #print(ip)
+        #ip = int(''.join(map(str,ip)))
+
+        #print(ip)
+
+        #bin(int,2)
+
+        #print(val)
 
         
         
         
         #xor the values
-  
-
-
-
-
-
-
-
-
-
-
-        
