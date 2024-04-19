@@ -1,7 +1,30 @@
-import random 
+import random
 import time
 
-ef = [
+Init_Perm = [
+    58,	50,	42,	34,	26,	18,	10,	2,
+    60,	52,	44,	36,	28,	20,	12,	4,
+    62,	54,	46,	38,	30,	22,	14,	6,
+    64,	56,	48,	40,	32,	24,	16,	8,
+    57,	49,	41,	33,	25,	17,	9,	1,
+    59,	51,	43,	35,	27,	19,	11,	3,
+    61,	53,	45,	37,	29,	21,	13,	5,
+    63,	55,	47,	39,	31,	23,	15,	7
+]
+
+Final_Perm = [
+    40,	8,	48,	16,	56,	24,	64,	32,
+    39,	7,	47,	15,	55,	23,	63,	31,
+    38,	6,	46,	14,	54,	22,	62,	30,
+    37,	5,	45,	13,	53,	21,	61,	29,
+    36,	4,	44,	12,	52,	20,	60,	28,
+    35,	3,	43,	11,	51,	19,	59,	27,
+    34,	2,	42,	10,	50,	18,	58,	26,
+    33,	1,	41,	9,	49,	17,	57,	25
+
+]
+
+Expan_Tab = [
     32,	1,	2,	3,	4,	5,
     4,	5,	6,	7,	8,	9,
     8,	9,	10,	11,	12,	13,
@@ -11,241 +34,145 @@ ef = [
     24,	25,	26,	27,	28,	29,
     28,	29,	30,	31,	32,	1
 ]
-ip = [
-    58, 50, 42, 34, 26, 18, 10, 2,
-    60,	52,	44,	36,	28,	20,	12,	4,
-    62,	54,	46,	38,	30,	22,	14,	6,
-    64,	56,	48,	40,	32,	24,	16,	8,
-    57,	49,	41,	33,	25,	17,	9,  1,
-    59,	51,	43,	35,	27,	19,	11,	3,
-    61,	53,	45,	37,	29,	21,	13,	5,
-    63,	55,	47,	39,	31,	23,	15,	7
-]
-pc2 = [
-    14, 17, 11, 24, 1, 5,
-    3, 28, 15, 6, 21, 10,
-    23, 19, 12, 4, 26, 8,
-    16, 7, 27, 20, 13, 2,
-    41, 52, 31, 37, 47, 55,
-    30, 40, 51, 45, 33, 48,
-    44, 49, 39, 56, 34, 53,
-    46, 42, 50, 36, 29, 32
-]
-fp = [
-    40,	8,	48,	16,	56,	24,	64,	32,
-    39,	7,	47,	15,	55,	23,	63,	31,
-    38,	6,	46,	14,	54,	22,	62,	30,
-    37,	5,	45,	13,	53,	21,	61,	29,
-    36,	4,	44,	12,	52,	20,	60,	28,
-    35,	3,	43,	11,	51,	19,	59,	27,
-    34,	2,	42,	10,	50,	18,	58,	26,
-    33,	1,	41,	9,  49,	17,	57,	25
-]
-SBox = [
-    [[14,	4,	13,	1,	2,	15,	11,	8,	3,	10,	6,	12,	5,	9,	0,	7],
-    [0,	15,	7,	4,	14,	2,	13,	1,	10,	6,	12,	11,	9,	5,	3,	8],
-    [4,	1,	14,	8,	13,	6,	2,	11,	15,	12,	9,	7,	3,	10,	5,	0],
-    [15,	12,	8,	2,	4,	9,	1,	7,	5,	11,	3,	14,	10,	0,	6,	13],
-    ],
 
-    [[15,	1,	8,	14,	6,	11,	3,	4,	9,	7,	2,	13,	12,	0,	5,	10],
-    [3,	13,	4,	7,	15,	2,	8,	14,	12,	0,	1,	10,	6,	9,	11,	5],
-    [0,	14,	7,	11,	10,	4,	13,	1,	5,	8,	12,	6,	9,	3,	2,	15],
-    [13,	8,	10,	1,	3,	15,	4,	2,	11,	6,	7,	12,	0,	5,	14,	9],
-    ],
-
-    [[10,	0,	9,	14,	6,	3,	15,	5,	1,	13,	12,	7,	11,	4,	2,	8],
-    [13,	7,	0,	9,	3,	4,	6,	10,	2,	8,	5,	14,	12,	11,	15,	1],
-    [13,	6,	4,	9,	8,	15,	3,	0,	11,	1,	2,	12,	5,	10,	14,	7],
-    [1,	10,	13,	0,	6,	9,	8,	7,	4,	15,	14,	3,	11,	5,	2,	12],
-    ],
-
-    [[7,	13	,14	,3	,0	,6	,9	,10	,1	,2	,8	,5	,11	,12	,4	,15],
-    [13,	8	,11	,5	,6	,15	,0	,3	,4	,7	,2	,12	,1	,10	,14	,9],
-    [10,	6	,9	,0	,12	,11	,7	,13	,15	,1	,3	,14	,5	,2	,8	,4],
-    [3,	15	,0	,6	,10	,1	,13	,8	,9	,4	,5	,11	,12	,7	,2	,14],
-    ],
-
-    [[2,	12	,4	,1	,7	,10	,11	,6	,8	,5	,3	,15	,13	,0	,14	,9],
-    [14,	11	,2	,12	,4	,7	,13	,1	,5	,0	,15	,10	,3	,9	,8	,6],
-    [4,	2 ,1	,11	,10	,13	,7	,8	,15	,9	,12	,5	,6	,3	,0	,14],
-    [11,	8	,12	,7	,1	,14	,2	,13	,6	,15	,0	,9	,10	,4	,5	,3],
-    ],
-
-    [[12,1	,10	,15	,9	,2	,6	,8	,0	,13	,3	,4	,14	,7	,5,	11],
-    [10,	15	,4	,2	,7	,12	,9	,5	,6	,1	,13	,14	,0	,11	,3	,8],
-    [9,	14	,15	,5	,2	,8	,12	,3	,7	,0	,4	,10	,1	,13	,11	,6],
-    [4,	3	,2	,12	,9	,5	,15	,10	,11	,14	,1	,7	,6	,0	,8	,13],
-    ],
-
-    [[4,	11	,2	,14	,15	,0	,8	,13	,3	,12	,9	,7	,5	,10	,6	,1],
-    [13,	0	,11	,7	,4	,9	,1	,10	,14	,3	,5	,12	,2	,15	,8	,6],
-    [1,	4	,11	,13	,12	,3	,7	,14	,10	,15	,6	,8	,0	,5	,9	,2],
-    [6,	11	,13	,8	,1	,4	,10	,7	,9	,5	,0	,15	,14	,2	,3	,12],
-    ],
-
-    [[13,	2	,8	,4	,6	,15	,11	,1	,10	,9	,3	,14	,5	,0	,12, 7],
-    [1,	15	,13	,8	,10	,3	,7	,4	,12	,5	,6	,11	,0	,14	,9	,2],
-    [7,	11	,4	,1	,9	,12	,14	,2	,0	,6	,10	,13	,15	,3	,5	,8],
-    [2,	1	,14	,7	,4	,10	,8	,13	,15	,12	,9	,0	,3	,5	,6	,11],
-    ]
-
-    # es un linko ayuda https://github.com/RobinDavid/pydes/blob/master/pydes.py#L42
-]
-
-
-interPerm = [
+Perm_Tab = [
     16,	7,	20,	21,	29,	12,	28,	17,
     1,	15,	23,	26,	5,	18,	31,	10,
     2,	8,	24,	14,	32,	27,	3,	9,
-    19,	13,	30,	6,	22,	11,	4,	25
+    19,	13,	30,	6,	22,	11,	4,	25,
 ]
 
-def encrypt(plaintext, key):
-    ciphertext = ""
-    return ciphertext
+PC2 = [
+    14,	17,	11,	24,	1,	5,
+    3,	28,	15,	6,	21,	10,
+    23,	19,	12,	4,	26,	8,
+    16,	7,	27,	20,	13,	2,
+    41,	52,	31,	37,	47,	55,
+    30,	40,	51,	45,	33,	48,
+    44,	49,	39,	56,	34,	53,
+    46,	42,	50,	36,	29,	32,
 
-def decrypt(ciphertext, key):
-    plaintext=""
-    return plaintext
+]
 
-def DES(number, key, method):
-    key = key[:1] + key[1:]
+SBox = [
+    14, 4,  13, 1, 2,  15, 11, 8,  3,  10, 6,  12, 5,  9,  0, 7,
+    0,  15, 7,  4, 14, 2,  13, 1,  10, 6,  12, 11, 9,  5,  3, 8,
+    4,  1,  14, 8, 13, 6,  2,  11, 15, 12, 9,  7,  3,  10, 5, 0,
+    15, 12, 8,  2, 4,  9,  1,  7,  5,  11, 3,  14, 10, 0,  6, 13
+]
 
-def strToBits(input):
-    binary = "" #binary string to return
-    if len(input) < 8:#if len less than 8
-        input = input.ljust(8,'0')#Pad w/ zeros
+#generate 56 bit key based on system time
+def generate_key():
+    random.seed(time.time())
+    return format(random.getrandbits(56), '056b')
 
-    for char in input:#get char in input
-        binVal = format(ord(char),'08b')#convert to number, than format to binary 8 digits long
-        binary += binVal#add binary for char into the binary string
+#function to permute block against the perumtation tables
+def permute(block, table):
+    return ''.join(block[i-1] for i in table)
 
-    return binary#return binary string to user
+#functrion to xor
+def xor(bits1, bits2):
+    return ''.join('1' if b1 != b2 else '0' for b1, b2 in zip(bits1, bits2))
 
-def initialPerm(binString, ip):
-    return [binString[x-1] for x in ip]#swap positions with initPermutation
+#sbox, only first box
+def s_box_substitution(bits):
+    output = ''
+    for i in range(0, len(bits), 6):
+        block = bits[i:i+6]
+        row = block[0] + block[5]
+        column = block[1:5]
+        colInt = int(column, 2)
+        rowInt = int(row, 2)
+        output += format(SBox[rowInt * 16 + colInt], '04b')
+    return output
 
-def expanFunc(binString, ef):
-    return [binString[x-1] for x in ef]#swap positions with initPermutation
+#left shift for the key
+def circular_left_shift(key, shifts):
+    return key[shifts:] + key[:shifts]
 
-def permutation(binString, interPerm):
-    return [binString[x-1] for x in interPerm]#swap positions with initPermutation
+#schedule the left shifts for each of the 16 rounds
+def key_schedule(key, rounds=16):
+    for _ in range(rounds):
+        yield circular_left_shift(key, 1)
+
+def pad(text):
+    #calculate padding for text non multiple of 8
+    padding_length = 8 - (len(text) % 8)
+    padding = chr(padding_length) * padding_length
+    #convert int to unicode
+    return text + padding
+
+def unpad(text):
+    #remove padding for multiple chars(doesnt work perfectly)
+    padding_length = ord(text[-1])
+    return text[:-padding_length]
+
+def DES(text, key, encrypt=True):
+    #pad text if not multiple of 8
+    if encrypt:
+        text = pad(text)
     
-def performPc2(key, pc2):
-    return [key[x-1] for x in pc2]#swap positions with initPermutation
+    binaryData = ''.join(format(ord(char), '08b') for char in text)
+    blocks = [binaryData[i:i+64] for i in range(0, len(binaryData), 64)]
+    #for after permutations, sbox, etc
+    processed_blocks = []
+    #get keys from key scheduler, add to subkey
+    subkeys = list(key_schedule(key))
+    #reverse to decrypt
+    if not encrypt:
+        subkeys.reverse()
 
+    #loop through blocks of bits
+    for block in blocks:
+        #split bits in half
+        permuted_block = permute(block, Init_Perm)
+        left, right = permuted_block[:32], permuted_block[32:]
+        for subkey in subkeys:
+            #loop for each round
+            right_expanded = permute(right, Expan_Tab)
+            right_xored = xor(right_expanded, subkey)#first xor
+            rightSub = s_box_substitution(right_xored)#sBox
+            new_right = permute(rightSub, Perm_Tab)#second permute
+            new_left = xor(left, new_right)#second xor
+            left, right = right, new_left#swap left and right
 
+        pre_final_permutation = right + left
+        final_permuted_blocks = permute(pre_final_permutation, Final_Perm)
+        processed_blocks.append(final_permuted_blocks)#add them back
 
-def generateKey():
-    #seed rng based on system time
-    random.seed(time.time()) 
+    #join blocks back together
+    outputBin = ''.join(processed_blocks)
+    #transfer back to string
+    output = ''.join(chr(int(outputBin[i:i+8], 2)) for i in range(0, len(outputBin), 8))
     
-    #get 56 bit key
-    key = random.getrandbits(56)
-    
-	#convert to binary and pad empty with 0s
-    key = bin(key)[2:].zfill(56)
-    
-    return key
+    #if decrypt, unpad to get rid of useless chars
+    if not encrypt:
+        output = unpad(output)
+    return output
 
 
+#pass text and key to des to encrypt
+def encrypt(text, key, encrypt=True):
+    return DES(text, key, encrypt)
 
+#pass text and key to des to decrypt
+def decrypt(text, key, encrypt=False):
+    return DES(text, key, encrypt)
 
 
 if __name__ == '__main__':
-    text = ""
-    print('DES Implementation:\n')
-    while text != "Quit":
-        text = str(input('Enter text to encrypt ("Exit" to quit): '))
-        
-        #Key returns 48 bit i.e apply pc-2
-        b = generateKey()
-        print(b)
-        print(len(str(b)))
+    text= ""
+    key = generate_key()
+    while text.lower() != 'quit':
+        print("Enter text to encrypt or decrypt ('Quit' to stop): ")
+        text = input()
+        encryptedText = encrypt(text, key, encrypt)
+        decrypteText = decrypt(encryptedText, key, encrypt)
+        print('Encrypted:', encryptedText)
+        print('Decrypted:', decrypteText)
+        #pass output to file because it is weird for some reason
+        with open("Output.txt", "w", encoding="utf-8") as f:
+            f.write("encrypted text: %s\n" % encryptedText)
+            f.write("decrypted text: %s\n" % decrypteText)
 
-        key_bits = [int(bit) for bit in b]
-
-        pcTwoKey = performPc2(key_bits, pc2)
-        print("Key after pc2")
-        ba = int(''.join(map(str,pcTwoKey)),2)
-        print(ba)
-        print(len(str(ba)))
-
-        #convert text to binary
-        binRep = strToBits(text) 
-
-        
-        #perform initial permutation || returns 64 bit
-        initialPermutation = initialPerm(binRep, ip)
-        print("Inital Perm for text")
-        print(binRep)
-        bc = int(''.join(map(str,initialPermutation)),2)
-        print(bc)
-
-        #split permutation into 32 bit bits halves
-        lhalf, rhalf = initialPermutation[:len(initialPermutation)//2], initialPermutation[len(initialPermutation)//2:]
-        print("splitting up halves")
-        
-        #perform expansion permutation || returns 48 bit
-        rhalf = expanFunc(rhalf,ef)
-        print("expanding right half")
-        cda = int(''.join(map(str,rhalf)),2)
-        print(cda)
-        
-        #convert back to integer
-        intRhalf = int(''.join(map(str,rhalf)),2)
-        xorKey = int(''.join(map(str,pcTwoKey)),2)
-
-
-        #xor two integers together
-        xord = xorKey ^ intRhalf
-        print("xord:")
-        print(xord)
-        print(xorKey)
-        print(intRhalf)
-
-        #print(bin(xorKey)[2:])
-        #print(bin(intRhalf)[2:])
-        #print(bin(xord)[2:])
-
-    
-        #s-box
-        a= bin(xord)[2:]
-        val = 0
-
-        for i in range(8):
-            b = a[i*6:(i+1)*6]
-
-            first = int(b[0])
-            last = int(b[-1])
-            mid = int(b[1:5],2)
-            row = first * 2 + last
-            val = (val << 4) + SBox[i][row][mid]
-
-        #print(val)
-        perm = bin(val)[2:]
-        print("permmutation")
-        print(perm)#convert this to list!!
-
-        #intertemp = permutation(perm, interPerm)
-        #temp = int(''.join(map(str,perm)),2)
-        #print(intertemp)
-        #print(bin(temp)[2:])
-
-
-        #ip = format(val, '032b')
-        #ip = permutation(ip, interPerm)
-        #print(ip)
-        #ip = int(''.join(map(str,ip)))
-
-        #print(ip)
-
-        #bin(int,2)
-
-        #print(val)
-
-        
-        
-        
-        #xor the values
+        f.close()
